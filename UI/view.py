@@ -61,8 +61,8 @@ class View(ft.UserControl):
         self._page.controls.append(row1)
 
         self._txtInLun = ft.TextField(label="Lunghezza cammino", width=120)
-        self._ddProdStart = ft.Dropdown(label="Start product", width=350)
-        self._ddProdEnd = ft.Dropdown(label="End product", width=350)
+        self._ddProdStart = ft.Dropdown(label="Start product", width=350, disabled = True)
+        self._ddProdEnd = ft.Dropdown(label="End product", width=350, disabled = True)
 
         self._btnCercaCammino = ft.ElevatedButton(text="Cerca ",
                                                   on_click=self._controller.handleCercaCammino, width=120)

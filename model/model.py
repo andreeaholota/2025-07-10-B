@@ -1,3 +1,5 @@
+import copy
+
 import networkx as nx
 from database.DAO import DAO
 
@@ -52,4 +54,36 @@ class Model:
             listaProdotti.append((prodotto, bilancio))
 
         return listaProdotti[:n]
+
+    def getCamminoOttimo(self, nodo_start_str, nodo_end_str, lun):
+        nodo_start = self._idMap[nodo_start_str]
+        nodo_end = self._idMap[nodo_end_str]
+
+        self._bestPath = None
+        self._bestScore = -1
+        print(f"Chiamo la funzione  con {nodo_start_str} e {nodo_end_str}\n\n")
+        self._ricorsione(nodo_start, nodo_end, [nodo_start], 0 , lun+1)
+        print(f"->-> Best path: {self._bestPath}")
+        return self._bestPath, self._bestScore
+
+    def _ricorsione(self, nodo_corrente, nodo_end, parziale, peso, lun):
+        if len(parziale) == lun:
+            print(f"Raggiunta la lunghezza massima")
+            if nodo_corrente == nodo_end and peso > self._bestScore:
+                print(f"Trovato nuovo massimo: {peso} \n\n")
+                self._bestScore = peso
+                self._bestPath = copy.deepcopy(parziale)
+            return
+        print("---------------------------------")
+        for vicino in self._graph.successors(nodo_corrente):
+            print(f"Raggiunto il nodo vicino {vicino}")
+            if vicino not in parziale:
+                pesoArco = self._graph[nodo_corrente][vicino]["weight"]
+                parziale.append(vicino)
+                self._ricorsione(vicino, nodo_end, parziale, peso + pesoArco, lun)
+                parziale.pop()
+
+
+
+
 
